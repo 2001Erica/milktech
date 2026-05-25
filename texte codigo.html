@@ -1,0 +1,256 @@
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+
+/* =========================================
+   BANCO TEMPORÁRIO
+========================================= */
+
+let animais = [
+  {
+    id: 1,
+    nome: 'Estrela',
+    brinco: 'BR-001',
+    peso: 520,
+    producao: 28,
+    status: 'Saudável'
+  },
+  {
+    id: 2,
+    nome: 'Mimosa',
+    brinco: 'BR-002',
+    peso: 410,
+    producao: 22,
+    status: 'Prenha'
+  },
+  {
+    id: 3,
+    nome: 'Boneca',
+    brinco: 'BR-003',
+    peso: 480,
+    producao: 18,
+    status: 'Tratamento'
+  }
+];
+
+let producoes = [
+  {
+    id: 1,
+    animal: 'Estrela',
+    data: '2026-05-10',
+    manha: 14,
+    tarde: 14,
+    total: 28
+  }
+];
+
+let alertas = [
+  {
+    id: 1,
+    animal: 'Boneca',
+    nivel: 'Alta',
+    descricao: 'Temperatura elevada detectada'
+  }
+];
+
+let saude = [
+  {
+    id: 1,
+    animal: 'Boneca',
+    tipo: 'Tratamento',
+    descricao: 'Tratamento mastite'
+  }
+];
+
+/* =========================================
+   ROTA PRINCIPAL
+========================================= */
+
+app.get('/', (req, res) => {
+  res.json({
+    mensagem: 'MilkTech API funcionando 🐄'
+  });
+});
+
+/* =========================================
+   ANIMAIS
+========================================= */
+
+// LISTAR TODOS
+app.get('/animais', (req, res) => {
+  res.json(animais);
+});
+
+// BUSCAR POR ID
+app.get('/animais/:id', (req, res) => {
+  const animal = animais.find(a => a.id == req.params.id);
+
+  if (!animal) {
+    return res.status(404).json({
+      erro: 'Animal não encontrado'
+    });
+  }
+
+  res.json(animal);
+});
+
+// CADASTRAR
+app.post('/animais', (req, res) => {
+
+  const novoAnimal = {
+    id: animais.length + 1,
+    nome: req.body.nome,
+    brinco: req.body.brinco,
+    peso: req.body.peso,
+    producao: req.body.producao,
+    status: req.body.status
+  };
+
+  animais.push(novoAnimal);
+
+  res.status(201).json({
+    mensagem: 'Animal cadastrado',
+    animal: novoAnimal
+  });
+});
+
+// EDITAR
+app.put('/animais/:id', (req, res) => {
+
+  const index = animais.findIndex(a => a.id == req.params.id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      erro: 'Animal não encontrado'
+    });
+  }
+
+  animais[index] = {
+    ...animais[index],
+    ...req.body
+  };
+
+  res.json({
+    mensagem: 'Animal atualizado',
+    animal: animais[index]
+  });
+});
+
+// DELETAR
+app.delete('/animais/:id', (req, res) => {
+
+  const index = animais.findIndex(a => a.id == req.params.id);
+
+  if (index === -1) {
+    return res.status(404).json({
+      erro: 'Animal não encontrado'
+    });
+  }
+
+  const removido = animais.splice(index, 1);
+
+  res.json({
+    mensagem: 'Animal removido',
+    removido
+  });
+});
+
+/* =========================================
+   PRODUÇÃO
+========================================= */
+
+// LISTAR PRODUÇÃO
+app.get('/producao', (req, res) => {
+  res.json(producoes);
+});
+
+// REGISTRAR PRODUÇÃO
+app.post('/producao', (req, res) => {
+
+  const { animal, data, manha, tarde } = req.body;
+
+  const novaProducao = {
+    id: producoes.length + 1,
+    animal,
+    data,
+    manha,
+    tarde,
+    total: Number(manha) + Number(tarde)
+  };
+
+  producoes.push(novaProducao);
+
+  res.status(201).json({
+    mensagem: 'Produção registrada',
+    producao: novaProducao
+  });
+});
+
+/* =========================================
+   ALERTAS
+========================================= */
+
+// LISTAR ALERTAS
+app.get('/alertas', (req, res) => {
+  res.json(alertas);
+});
+
+// NOVO ALERTA
+app.post('/alertas', (req, res) => {
+
+  const novoAlerta = {
+    id: alertas.length + 1,
+    animal: req.body.animal,
+    nivel: req.body.nivel,
+    descricao: req.body.descricao
+  };
+
+  alertas.push(novoAlerta);
+
+  res.status(201).json({
+    mensagem: 'Alerta criado',
+    alerta: novoAlerta
+  });
+});
+
+/* =========================================
+   SAÚDE
+========================================= */
+
+// LISTAR REGISTROS
+app.get('/saude', (req, res) => {
+  res.json(saude);
+});
+
+// NOVO REGISTRO
+app.post('/saude', (req, res) => {
+
+  const novoRegistro = {
+    id: saude.length + 1,
+    animal: req.body.animal,
+    tipo: req.body.tipo,
+    descricao: req.body.descricao
+  };
+
+  saude.push(novoRegistro);
+
+  res.status(201).json({
+    mensagem: 'Registro salvo',
+    registro: novoRegistro
+  });
+});
+
+/* =========================================
+   SERVIDOR
+========================================= */
+
+const PORT = 3000;
+
+app.listen(PORT, () => {
+  console.log(`🐄 MilkTech API rodando em:
+http://localhost:${PORT}`);
+});

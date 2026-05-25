@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MilkTech</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde: #2ec4a0;
+    --verde-escuro: #1a9e82;
+    --azul: #1a4a6e;
+    --azul-claro: #e8f4f1;
+    --laranja: #ff6b35;
+    --roxo: #7c5cbf;
+    --amarelo: #f5a623;
+    --vermelho: #e74c3c;
+    --cinza: #f5f7fa;
+    --cinza2: #e8ecf0;
+    --texto: #1e2d3d;
+    --texto2: #6b7c93;
+    --branco: #ffffff;
+    --sombra: 0 4px 20px rgba(0,0,0,0.08);
+    --radius: 16px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cinza);
+    color: var(--texto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    max-width: 420px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, var(--azul) 0%, #0f3a5a 100%);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, var(--verde), var(--verde-escuro));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .header h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--branco);
+    letter-spacing: -0.5px;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .btn-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255,255,255,0.12);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.2s;
+  }
+  .btn-icon:hover { background: rgba(255,255,255,0.22); }
+
+  .badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--laranja);
+    color: white;
+    font-size: 9px;
+    font-weight: 800;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--azul);
+  }
+
+  /* CONTENT */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px;
+  }
+
+  .tab-panel { display: none; animation: fadeIn 0.3s ease; }
+  .tab-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity:0; transform: translateY(8px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    background: var(--branco);
+    border-top: 1px solid var(--cinza2);
+    display: flex;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
+
+  .nav-item {
+    flex: 1;
+    padding: 10px 4px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--texto2);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+  }
+
+  .nav-item .icon { font-size: 20px; }
+  .nav-item.active { color: var(--verde-escuro); }
+  .nav-item.active .icon { transform: scale(1.1); }
+
+  .nav-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 2px;
+    background: var(--verde);
+    border-radius: 0 0 4px 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .nav-item.active::after { opacity: 1; }
+
+  /* ===== ABA INÍCIO ===== */
+  .page-padding { padding: 16px; }
+
+  .greeting {
+    padding: 16px 16px 8px;
+    font-size: 13px;
+    color: var(--texto2);
+  }
+  .greeting strong { color: var(--texto); font-size: 18px; display: block; font-weight: 700; }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px 16px;
+  }
+
+  .stat-card {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .stat-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .stat-icon.verde { background: #e6f9f4; }
+  .stat-icon.laranja { background: #fff0eb; }
+  .stat-icon.roxo { background: #f0ebff; }
+  .stat-icon.vermelho { background: #ffeaea; }
+
+  .stat-label { font-size: 11px; color: var(--texto2); }
+  .stat-val { font-size: 22px; font-weight: 800; color: var(--texto); font-family: 'Nunito', sans-serif; line-height: 1; }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 16px 10px;
+  }
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--texto);
+  }
+  .ver-todos {
+    font-size: 12px;
+    color: var(--verde-escuro);
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* Chart */
+  .chart-card {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 0 16px 16px;
+    box-shadow: var(--sombra);
+  }
+
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--texto2); margin-bottom: 12px; }
+
+  .chart-wrap {
+    height: 100px;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    position: relative;
+  }
+
+  .chart-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .chart-bar {
+    width: 100%;
+    border-radius: 6px 6px 0 0;
+    background: var(--cinza2);
+    transition: height 0.5s ease;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .chart-bar.highlight { background: linear-gradient(180deg, var(--verde), var(--verde-escuro)); }
+  .chart-bar:hover { opacity: 0.8; }
+
+  .chart-label { font-size: 10px; color: var(--texto2); text-align: center; }
+
+  .chart-tooltip {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--azul);
+    color: white;
+    font-size: 10px;
+    padding: 3px 7px;
+    border-radius: 6px;
+    white-space: nowrap;
+    display: none;
+    font-weight: 600;
+  }
+  .chart-bar:hover .chart-tooltip { display: block; }
+
+  /* Alertas */
+  .alert-card {
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin: 0 16px 8px;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-left: 3px solid;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .alert-card:hover { transform: translateX(3px); }
+  .alert-card.alta { border-color: var(--vermelho); }
+  .alert-card.media { border-color: var(--amarelo); }
+
+  .alert-icon { font-size: 20px; }
+  .alert-info {}
+  .alert-name { font-size: 13px; font-weight: 700; }
+  .alert-desc { font-size: 11px; color: var(--texto2); margin-top: 1px; }
+
+  /* ===== ABA REBANHO ===== */
+  .search-bar {
+    padding: 12px 16px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 10px 14px 10px 36px;
+    border: 1.5px solid var(--cinza2);
+    border-radius: 12px;
+    font-size: 13px;
+    outline: none;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--branco);
+    color: var(--texto);
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .search-input:focus { border-color: var(--verde); }
+
+  .search-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--texto2);
+    font-size: 14px;
+    pointer-events: none;
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .filter-chips::-webkit-scrollbar { display: none; }
+
+  .chip {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1.5px solid var(--cinza2);
+    background: var(--branco);
+    color: var(--texto2);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .chip.active {
+    background: var(--verde);
+    border-color: var(--verde);
+    color: white;
+  }
+
+  .animal-card {
+    background: var(--branco);
+    margin: 0 16px 10px;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .animal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); }
+
+  .animal-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--azul-claro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    color: var(--azul);
+    flex-shrink: 0;
+  }
+
+  .animal-info { flex: 1; }
+  .animal-top { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .animal-name { font-size: 14px; font-weight: 700; }
+
+  .status-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+  .status-tag.saudavel { background: #e6f9f4; color: var(--verde-escuro); }
+  .status-tag.prenha { background: #f0ebff; color: var(--roxo); }
+  .status-tag.tratamento { background: #fff0eb; color: var(--laranja); }
+
+  .animal-meta { font-size: 11px; color: var(--texto2); display: flex; gap: 10px; }
+  .animal-brinco { font-size: 11px; color: var(--texto2); margin-bottom: 2px; }
+
+  .animal-arrow { color: var(--cinza2); font-size: 18px; }
+
+  /* Detalhe animal */
+  .detail-panel {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 420px;
+    height: 100%;
+    background: var(--cinza);
+    z-index: 200;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+  }
+  .detail-panel.open { display: block; }
+
+  @keyframes slideUp {
+    from { transform: translateX(-50%) translateY(30px); opacity: 0; }
+    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+  }
+
+  .detail-header {
+    background: linear-gradient(135deg, var(--azul), #0f3a5a);
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+  }
+
+  .btn-back {
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .detail-header h2 { font-family: 'Nunito', sans-serif; font-size: 20px; font-weight: 800; flex: 1; }
+
+  .detail-body { padding: 16px; }
+
+  .detail-hero {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: var(--sombra);
+  }
+
+  .detail-avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .detail-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: var(--azul-claro);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 900;
+    font-family: 'Nunito', sans-serif;
+    color: var(--azul);
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .detail-item label { font-size: 10px; color: var(--texto2); display: block; }
+  .detail-item span { font-size: 14px; font-weight: 600; }
+
+  .info-card {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--sombra);
+  }
+
+  .info-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--texto2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .producao-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--cinza2);
+  }
+  .producao-row:last-child { border-bottom: none; }
+
+  .producao-data { font-size: 12px; color: var(--texto2); }
+  .producao-turnos { font-size: 12px; color: var(--texto2); }
+  .producao-total {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--verde-escuro);
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .saude-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--cinza2);
+  }
+  .saude-row:last-child { border-bottom: none; }
+
+  .saude-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #e6f4ff;
+    color: #1a6ebc;
+  }
+  .saude-tag.vacina { background: #e6f9f4; color: var(--verde-escuro); }
+  .saude-tag.exame { background: #f0ebff; color: var(--roxo); }
+  .saude-tag.tratamento2 { background: #fff0eb; color: var(--laranja); }
+
+  .alerta-row {
+    background: #fffbea;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border-left: 3px solid var(--amarelo);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* ===== ABA PRODUÇÃO ===== */
+  .producao-list-item {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .prod-left h4 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+  .prod-left .prod-data { font-size: 11px; color: var(--texto2); }
+  .prod-left .prod-turnos { font-size: 12px; color: var(--texto2); margin-top: 3px; }
+  .prod-total-badge {
+    background: var(--azul-claro);
+    color: var(--verde-escuro);
+    font-size: 16px;
+    font-weight: 800;
+    font-family: 'Nunito', sans-serif;
+    padding: 6px 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Form registrar produção */
+  .form-card {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 0 16px 16px;
+    box-shadow: var(--sombra);
+    display: none;
+  }
+  .form-card.open { display: block; }
+
+  .form-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: var(--texto);
+  }
+
+  .form-group { margin-bottom: 12px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: var(--texto2); display: block; margin-bottom: 5px; }
+
+  .form-group select,
+  .form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--cinza2);
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    outline: none;
+    color: var(--texto);
+    transition: border-color 0.2s;
+    background: var(--cinza);
+  }
+  .form-group select:focus,
+  .form-group input:focus { border-color: var(--verde); background: var(--branco); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--verde), var(--verde-escuro));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-add {
+    padding: 7px 14px;
+    background: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+  }
+  .btn-add:hover { background: var(--verde-escuro); }
+
+  /* ===== ABA SAÚDE ===== */
+  .saude-item {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: var(--sombra);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .saude-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+  .saude-dot.tratamento { background: var(--laranja); }
+  .saude-dot.vacina { background: var(--verde); }
+  .saude-dot.exame { background: var(--roxo); }
+
+  .saude-info { flex: 1; }
+  .saude-top { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .saude-nome { font-size: 14px; font-weight: 700; }
+  .saude-desc { font-size: 12px; color: var(--texto2); }
+  .saude-med { font-size: 11px; color: var(--texto2); margin-top: 2px; font-style: italic; }
+
+  .saude-right { text-align: right; }
+  .saude-data { font-size: 11px; color: var(--texto2); }
+  .btn-concluir {
+    margin-top: 5px;
+    padding: 4px 10px;
+    background: var(--azul-claro);
+    color: var(--verde-escuro);
+    border: none;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .btn-concluir:hover { background: var(--verde); color: white; }
+
+  /* ===== ABA ALERTAS ===== */
+  .alertas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 16px 10px;
+  }
+
+  .alertas-count {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .count-badge {
+    background: var(--laranja);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  .btn-marcar {
+    background: none;
+    border: 1.5px solid var(--cinza2);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texto2);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .btn-marcar:hover { border-color: var(--verde); color: var(--verde); }
+
+  .alerta-item {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: var(--sombra);
+    border-left: 4px solid;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .alerta-item:hover { transform: translateX(3px); }
+  .alerta-item.alta { border-color: var(--vermelho); background: #fff8f8; }
+  .alerta-item.media { border-color: var(--amarelo); background: #fffbf0; }
+
+  .alerta-emoji { font-size: 22px; margin-top: 2px; }
+  .alerta-content { flex: 1; }
+  .alerta-top { display: flex; align-items: center; gap: 8px; margin-bottom: 3px; }
+  .alerta-nome { font-size: 14px; font-weight: 700; }
+
+  .nivel-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 20px;
+  }
+  .nivel-tag.alta { background: #ffeaea; color: var(--vermelho); }
+  .nivel-tag.media { background: #fff0c0; color: #b07d00; }
+
+  .alerta-desc { font-size: 12px; color: var(--texto2); }
+  .alerta-time { font-size: 10px; color: var(--texto2); margin-top: 3px; }
+
+  .alerta-check {
+    font-size: 20px;
+    color: var(--cinza2);
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-top: 2px;
+  }
+  .alerta-check:hover { color: var(--verde); }
+  .alerta-item.lido { opacity: 0.5; }
+  .alerta-item.lido .alerta-check { color: var(--verde); }
+
+  /* ===== ABA FINANCEIRO ===== */
+  .financeiro-hero {
+    background: linear-gradient(135deg, var(--azul), #0f3a5a);
+    margin: 16px;
+    border-radius: var(--radius);
+    padding: 20px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(26,74,110,0.3);
+  }
+
+  .fin-label { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .fin-valor {
+    font-family: 'Nunito', sans-serif;
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: -1px;
+  }
+  .fin-sub { font-size: 12px; opacity: 0.7; margin-top: 6px; }
+
+  .fin-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 0 16px 16px;
+  }
+
+  .fin-stat {
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    box-shadow: var(--sombra);
+  }
+
+  .fin-stat .label { font-size: 10px; color: var(--texto2); margin-bottom: 4px; }
+  .fin-stat .val { font-size: 15px; font-weight: 800; font-family: 'Nunito', sans-serif; }
+  .fin-stat .val.verde { color: var(--verde-escuro); }
+  .fin-stat .val.vermelho { color: var(--vermelho); }
+  .fin-stat .val.azul { color: var(--azul); }
+
+  .custo-card {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 0 16px 16px;
+    box-shadow: var(--sombra);
+  }
+
+  .custo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--cinza2);
+  }
+  .custo-item:last-child { border-bottom: none; }
+
+  .custo-cor {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .custo-nome { flex: 1; font-size: 13px; }
+  .custo-val { font-size: 14px; font-weight: 700; font-family: 'Nunito', sans-serif; }
+
+  .bar-fill {
+    height: 6px;
+    border-radius: 3px;
+    margin-top: 4px;
+    transition: width 0.8s ease;
+  }
+
+  /* Nutrição */
+  .nutri-card {
+    background: var(--branco);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin: 0 16px 10px;
+    box-shadow: var(--sombra);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .nutri-card:hover { transform: translateY(-2px); }
+  .nutri-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .nutri-animal { font-size: 14px; font-weight: 700; }
+  .nutri-prod { font-size: 12px; color: var(--verde-escuro); font-weight: 600; }
+  .nutri-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--cinza2); }
+  .nutri-item:last-child { border-bottom: none; }
+  .nutri-item span { font-size: 13px; color: var(--texto2); }
+  .nutri-item strong { font-size: 13px; font-weight: 700; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--azul);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 300;
+    white-space: nowrap;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--cinza2); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">
+    <div class="logo-icon">🐄</div>
+    <h1>MilkTech</h1>
+  </div>
+  <div class="header-actions">
+    <button class="btn-icon" onclick="showTab('alertas')">
+      🔔
+      <span class="badge" id="alert-badge">4</span>
+    </button>
+    <button class="btn-icon">☰</button>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- ===== INÍCIO ===== -->
+  <div class="tab-panel active" id="tab-inicio">
+    <div class="greeting">
+      Bom dia, produtor! 👋
+      <strong>MilkTech — Início</strong>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon verde">🐄</div>
+        <div>
+          <div class="stat-label">Animais</div>
+          <div class="stat-val">5</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon verde">🥛</div>
+        <div>
+          <div class="stat-label">Leite hoje</div>
+          <div class="stat-val">80L</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon laranja">💊</div>
+        <div>
+          <div class="stat-label">Em tratamento</div>
+          <div class="stat-val">1</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon vermelho">⚠️</div>
+        <div>
+          <div class="stat-label">Alertas</div>
+          <div class="stat-val">4</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <div class="chart-title">📈 Produção (7 dias)</div>
+      <div class="chart-wrap" id="home-chart"></div>
+      <div style="display:flex; gap:8px; margin-top:8px;" id="home-chart-labels"></div>
+    </div>
+
+    <div class="section-header">
+      <div class="section-title">⚠️ Alertas Recentes</div>
+      <button class="ver-todos" onclick="showTab('alertas')">Ver todos ›</button>
+    </div>
+
+    <div class="alert-card alta" onclick="showTab('alertas')">
+      <div class="alert-icon">💔</div>
+      <div class="alert-info">
+        <div class="alert-name">Boneca</div>
+        <div class="alert-desc">Temperatura elevada detectada — possível infecção</div>
+      </div>
+    </div>
+
+    <div class="alert-card media" onclick="showTab('alertas')">
+      <div class="alert-icon">💗</div>
+      <div class="alert-info">
+        <div class="alert-name">Mimosa</div>
+        <div class="alert-desc">Detecção de cio — janela de inseminação</div>
+      </div>
+    </div>
+
+    <div class="alert-card media" onclick="showTab('alertas')">
+      <div class="alert-icon">🥛</div>
+      <div class="alert-info">
+        <div class="alert-name">Estrela</div>
+        <div class="alert-desc">Queda de 15% na produção nos últimos 3 dias</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REBANHO ===== -->
+  <div class="tab-panel" id="tab-rebanho">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 16px 0;">
+      <div style="font-family:'Nunito',sans-serif; font-size:20px; font-weight:800;">Rebanho</div>
+      <button class="btn-add" onclick="showToast('Função de adicionar animal em breve!')">+ Adicionar</button>
+    </div>
+
+    <div class="search-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" placeholder="Buscar por nome ou brinco..." oninput="filtrarAnimais(this.value)">
+      </div>
+    </div>
+
+    <div class="filter-chips">
+      <div class="chip active" onclick="filtroStatus('todos', this)">Todos</div>
+      <div class="chip" onclick="filtroStatus('saudavel', this)">Saudável</div>
+      <div class="chip" onclick="filtroStatus('prenha', this)">Prenha</div>
+      <div class="chip" onclick="filtroStatus('tratamento', this)">Em Tratamento</div>
+    </div>
+
+    <div id="lista-animais">
+      <div class="animal-card" onclick="abrirAnimal('estrela')" data-status="saudavel" data-nome="estrela">
+        <div class="animal-avatar">E</div>
+        <div class="animal-info">
+          <div class="animal-brinco">Brinco: BR-001</div>
+          <div class="animal-top">
+            <span class="animal-name">Estrela</span>
+            <span class="status-tag saudavel">Saudável</span>
+          </div>
+          <div class="animal-meta"><span>🏋️ 520 kg</span><span>🥛 28 L/dia</span></div>
+        </div>
+        <div class="animal-arrow">›</div>
+      </div>
+
+      <div class="animal-card" onclick="abrirAnimal('mimosa')" data-status="prenha" data-nome="mimosa">
+        <div class="animal-avatar" style="background:#f0ebff; color:var(--roxo)">M</div>
+        <div class="animal-info">
+          <div class="animal-brinco">Brinco: BR-002</div>
+          <div class="animal-top">
+            <span class="animal-name">Mimosa</span>
+            <span class="status-tag prenha">Prenha</span>
+          </div>
+          <div class="animal-meta"><span>🏋️ 410 kg</span><span>🥛 22 L/dia</span></div>
+        </div>
+        <div class="animal-arrow">›</div>
+      </div>
+
+      <div class="animal-card" onclick="abrirAnimal('boneca')" data-status="tratamento" data-nome="boneca">
+        <div class="animal-avatar" style="background:#fff0eb; color:var(--laranja)">B</div>
+        <div class="animal-info">
+          <div class="animal-brinco">Brinco: BR-003</div>
+          <div class="animal-top">
+            <span class="animal-name">Boneca</span>
+            <span class="status-tag tratamento">Em Tratamento</span>
+          </div>
+          <div class="animal-meta"><span>🏋️ 480 kg</span><span>🥛 18 L/dia</span></div>
+        </div>
+        <div class="animal-arrow">›</div>
+      </div>
+
+      <div class="animal-card" onclick="abrirAnimal('princesa')" data-status="saudavel" data-nome="princesa">
+        <div class="animal-avatar">P</div>
+        <div class="animal-info">
+          <div class="animal-brinco">Brinco: BR-004</div>
+          <div class="animal-top">
+            <span class="animal-name">Princesa</span>
+            <span class="status-tag saudavel">Saudável</span>
+          </div>
+          <div class="animal-meta"><span>🏋️ 540 kg</span><span>🥛 32 L/dia</span></div>
+        </div>
+        <div class="animal-arrow">›</div>
+      </div>
+
+      <div class="animal-card" onclick="abrirAnimal('flor')" data-status="saudavel" data-nome="flor">
+        <div class="animal-avatar">F</div>
+        <div class="animal-info">
+          <div class="animal-brinco">Brinco: BR-005</div>
+          <div class="animal-top">
+            <span class="animal-name">Flor</span>
+            <span class="status-tag saudavel">Saudável</span>
+          </div>
+          <div class="animal-meta"><span>🏋️ 390 kg</span><span>🥛 20 L/dia</span></div>
+        </div>
+        <div class="animal-arrow">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRODUÇÃO ===== -->
+  <div class="tab-panel" id="tab-producao">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 16px 12px;">
+      <div style="font-family:'Nunito',sans-serif; font-size:20px; font-weight:800;">Produção de Leite</div>
+      <button class="btn-add" onclick="toggleFormProd()">+ Registrar</button>
+    </div>
+
+    <div class="form-card" id="form-producao">
+      <div class="form-title">📝 Novo Registro</div>
+      <div class="form-group">
+        <label>Animal *</label>
+        <select id="prod-animal">
+          <option value="">Selecione o animal</option>
+          <option>Estrela</option>
+          <option>Mimosa</option>
+          <option>Boneca</option>
+          <option>Princesa</option>
+          <option>Flor</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="prod-data">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Manhã (L)</label>
+          <input type="number" id="prod-manha" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Tarde (L)</label>
+          <input type="number" id="prod-tarde" placeholder="0" min="0">
+        </div>
+      </div>
+      <button class="btn-primary" onclick="salvarProducao()">💾 Salvar Registro</button>
+    </div>
+
+    <div id="lista-producao">
+      <div class="producao-list-item">
+        <div class="prod-left">
+          <h4>Mimosa</h4>
+          <div class="prod-data">10/05/2026</div>
+          <div class="prod-turnos">Manhã: 24L &nbsp; Tarde: 20L</div>
+        </div>
+        <div class="prod-total-badge">🥛 44L</div>
+      </div>
+      <div class="producao-list-item">
+        <div class="prod-left">
+          <h4>Estrela</h4>
+          <div class="prod-data">10/05/2026</div>
+          <div class="prod-turnos">Manhã: 15L &nbsp; Tarde: 13L</div>
+        </div>
+        <div class="prod-total-badge">🥛 28L</div>
+      </div>
+      <div class="producao-list-item">
+        <div class="prod-left">
+          <h4>Princesa</h4>
+          <div class="prod-data">10/05/2026</div>
+          <div class="prod-turnos">Manhã: 17L &nbsp; Tarde: 15L</div>
+        </div>
+        <div class="prod-total-badge">🥛 32L</div>
+      </div>
+      <div class="producao-list-item">
+        <div class="prod-left">
+          <h4>Flor</h4>
+          <div class="prod-data">10/05/2026</div>
+          <div class="prod-turnos">Manhã: 10L &nbsp; Tarde: 10L</div>
+        </div>
+        <div class="prod-total-badge">🥛 20L</div>
+      </div>
+      <div class="producao-list-item">
+        <div class="prod-left">
+          <h4>Estrela</h4>
+          <div class="prod-data">09/05/2026</div>
+          <div class="prod-turnos">Manhã: 14L &nbsp; Tarde: 14L</div>
+        </div>
+        <div class="prod-total-badge">🥛 28L</div>
+      </div>
+      <div class="producao-list-item">
+        <div class="prod-left">
+          <h4>Princesa</h4>
+          <div class="prod-data">09/05/2026</div>
+          <div class="prod-turnos">Manhã: 16L &nbsp; Tarde: 14L</div>
+        </div>
+        <div class="prod-total-badge">🥛 30L</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SAÚDE ===== -->
+  <div class="tab-panel" id="tab-saude">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px 16px 12px;">
+      <div style="font-family:'Nunito',sans-serif; font-size:20px; font-weight:800;">Saúde Animal</div>
+      <button class="btn-add" onclick="showToast('Novo registro de saúde adicionado!')">+ Registrar</button>
+    </div>
+
+    <div class="saude-item">
+      <div class="saude-dot tratamento"></div>
+      <div class="saude-info">
+        <div class="saude-top">
+          <span class="saude-nome">Boneca</span>
+          <span class="saude-tag tratamento2">Tratamento</span>
+        </div>
+        <div class="saude-desc">Tratamento para mastite clínica no teto posterior direito</div>
+        <div class="saude-med">💊 Medicamento: Gentamicina</div>
+      </div>
+      <div class="saude-right">
+        <div class="saude-data">08/05</div>
+        <button class="btn-concluir" onclick="showToast('Tratamento concluído!')">✓ Concluir</button>
+      </div>
+    </div>
+
+    <div class="saude-item">
+      <div class="saude-dot vacina"></div>
+      <div class="saude-info">
+        <div class="saude-top">
+          <span class="saude-nome">Mimosa</span>
+          <span class="saude-tag vacina">Vacinação</span>
+        </div>
+        <div class="saude-desc">Vacinação contra aftosa</div>
+      </div>
+      <div class="saude-right">
+        <div class="saude-data">04/05</div>
+      </div>
+    </div>
+
+    <div class="saude-item">
+      <div class="saude-dot" style="background:var(--roxo)"></div>
+      <div class="saude-info">
+        <div class="saude-top">
+          <span class="saude-nome">Estrela</span>
+          <span class="saude-tag exame">Exame</span>
+        </div>
+        <div class="saude-desc">Exame de brucelose — resultado negativo</div>
+      </div>
+      <div class="saude-right">
+        <div class="saude-data">02/05</div>
+      </div>
+    </div>
+
+    <div class="saude-item">
+      <div class="saude-dot vacina"></div>
+      <div class="saude-info">
+        <div class="saude-top">
+          <span class="saude-nome">Princesa</span>
+          <span class="saude-tag vacina">Vacinação</span>
+        </div>
+        <div class="saude-desc">Vacinação contra carbúnculo</div>
+      </div>
+      <div class="saude-right">
+        <div class="saude-data">28/04</div>
+      </div>
+    </div>
+
+    <div style="padding:4px 16px 16px;">
+      <div style="background:var(--branco); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--sombra);">
+        <div style="font-size:13px; font-weight:700; color:var(--texto2); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">📅 Próximos Lembretes</div>
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--cinza2);">
+          <span style="font-size:18px;">💉</span>
+          <div style="flex:1;">
+            <div style="font-size:13px; font-weight:600;">Flor — Revacinação aftosa</div>
+            <div style="font-size:11px; color:var(--texto2);">Em 15 dias</div>
+          </div>
+          <span style="font-size:11px; color:var(--amarelo); font-weight:700;">Em breve</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; padding:8px 0;">
+          <span style="font-size:18px;">🔬</span>
+          <div style="flex:1;">
+            <div style="font-size:13px; font-weight:600;">Boneca — Revisão pós-tratamento</div>
+            <div style="font-size:11px; color:var(--texto2);">Em 3 dias</div>
+          </div>
+          <span style="font-size:11px; color:var(--vermelho); font-weight:700;">Urgente</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ALERTAS ===== -->
+  <div class="tab-panel" id="tab-alertas">
+    <div class="alertas-header">
+      <div class="alertas-count">
+        <span style="font-family:'Nunito',sans-serif; font-size:20px; font-weight:800;">Alertas</span>
+        <span class="count-badge" id="alertas-count-badge">4</span>
+      </div>
+      <button class="btn-marcar" onclick="marcarTodos()">✓ Marcar todos</button>
+    </div>
+
+    <div id="lista-alertas">
+      <div class="alerta-item alta" id="al-1">
+        <div class="alerta-emoji">💔</div>
+        <div class="alerta-content">
+          <div class="alerta-top">
+            <span class="alerta-nome">Boneca</span>
+            <span class="nivel-tag alta">Alta</span>
+          </div>
+          <div class="alerta-desc">Temperatura elevada detectada — possível infecção</div>
+          <div class="alerta-time">11/05/2026 20:13</div>
+        </div>
+        <div class="alerta-check" onclick="marcarAlerta('al-1')">✓</div>
+      </div>
+
+      <div class="alerta-item media" id="al-2">
+        <div class="alerta-emoji">💗</div>
+        <div class="alerta-content">
+          <div class="alerta-top">
+            <span class="alerta-nome">Mimosa</span>
+            <span class="nivel-tag media">Média</span>
+          </div>
+          <div class="alerta-desc">Detecção de cio — janela de inseminação</div>
+          <div class="alerta-time">11/05/2026 20:13</div>
+        </div>
+        <div class="alerta-check" onclick="marcarAlerta('al-2')">✓</div>
+      </div>
+
+      <div class="alerta-item media" id="al-3">
+        <div class="alerta-emoji">🥛</div>
+        <div class="alerta-content">
+          <div class="alerta-top">
+            <span class="alerta-nome">Estrela</span>
+            <span class="nivel-tag media">Média</span>
+          </div>
+          <div class="alerta-desc">Queda de 15% na produção nos últimos 3 dias</div>
+          <div class="alerta-time">11/05/2026 20:13</div>
+        </div>
+        <div class="alerta-check" onclick="marcarAlerta('al-3')">✓</div>
+      </div>
+
+      <div class="alerta-item alta" id="al-4">
+        <div class="alerta-emoji">⚖️</div>
+        <div class="alerta-content">
+          <div class="alerta-top">
+            <span class="alerta-nome">Flor</span>
+            <span class="nivel-tag alta">Alta</span>
+          </div>
+          <div class="alerta-desc">Perda de peso de 8kg na última semana</div>
+          <div class="alerta-time">11/05/2026 20:13</div>
+        </div>
+        <div class="alerta-check" onclick="marcarAlerta('al-4')">✓</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FINANCEIRO (oculto, acessível via menu) ===== -->
+  <div class="tab-panel" id="tab-financeiro">
+    <div style="padding:16px 16px 0;">
+      <div style="font-family:'Nunito',sans-serif; font-size:20px; font-weight:800;">Financeiro</div>
+    </div>
+
+    <div class="financeiro-hero">
+      <div class="fin-label">Fechamento do Mês</div>
+      <div class="fin-valor">R$ 48.920</div>
+      <div class="fin-sub">Maio / 2026 • Receita total</div>
+    </div>
+
+    <div class="fin-stats-row">
+      <div class="fin-stat">
+        <div class="label">Receita</div>
+        <div class="val verde">R$48.9k</div>
+      </div>
+      <div class="fin-stat">
+        <div class="label">Custos</div>
+        <div class="val vermelho">R$22.4k</div>
+      </div>
+      <div class="fin-stat">
+        <div class="label">Lucro</div>
+        <div class="val azul">R$26.5k</div>
+      </div>
+    </div>
+
+    <div class="custo-card">
+      <div class="section-title" style="margin-bottom:12px;">📊 Composição de Custos</div>
+
+      <div class="custo-item">
+        <div class="custo-cor" style="background:var(--azul)"></div>
+        <div style="flex:1;">
+          <div class="custo-nome">Alimentação</div>
+          <div class="bar-fill" style="background:var(--azul); width:68%"></div>
+        </div>
+        <div class="custo-val">R$ 15.200</div>
+      </div>
+
+      <div class="custo-item">
+        <div class="custo-cor" style="background:var(--verde)"></div>
+        <div style="flex:1;">
+          <div class="custo-nome">Saúde Animal</div>
+          <div class="bar-fill" style="background:var(--verde); width:28%"></div>
+        </div>
+        <div class="custo-val">R$ 4.800</div>
+      </div>
+
+      <div class="custo-item">
+        <div class="custo-cor" style="background:#adb5bd"></div>
+        <div style="flex:1;">
+          <div class="custo-nome">Mão de obra</div>
+          <div class="bar-fill" style="background:#adb5bd; width:14%"></div>
+        </div>
+        <div class="custo-val">R$ 2.400</div>
+      </div>
+    </div>
+
+    <div class="custo-card">
+      <div class="section-title" style="margin-bottom:12px;">💧 Custo por Litro</div>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:11px; color:var(--texto2);">Custo médio</div>
+          <div style="font-size:28px; font-weight:900; font-family:'Nunito',sans-serif; color:var(--azul)">R$ 0,93</div>
+          <div style="font-size:11px; color:var(--texto2)">por litro</div>
+        </div>
+        <div>
+          <div style="font-size:11px; color:var(--texto2);">Preço venda</div>
+          <div style="font-size:28px; font-weight:900; font-family:'Nunito',sans-serif; color:var(--verde-escuro)">R$ 2,40</div>
+          <div style="font-size:11px; color:var(--texto2)">por litro</div>
+        </div>
+        <div>
+          <div style="font-size:11px; color:var(--texto2);">Margem</div>
+          <div style="font-size:28px; font-weight:900; font-family:'Nunito',sans-serif; color:var(--laranja)">61%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NUTRIÇÃO (oculto, acessível via menu) ===== -->
+  <div class="tab-panel" id="tab-nutricao">
+    <div style="padding:16px 16px 4px;">
+      <div style="font-family:'Nunito',sans-serif; font-size:20px; font-weight:800;">Nutrição</div>
+    </div>
+
+    <div class="nutri-card" onclick="showToast('Editar dieta da Estrela')">
+      <div class="nutri-header">
+        <span class="nutri-animal">🐄 Estrela</span>
+        <span class="nutri-prod">28 L/dia</span>
+      </div>
+      <div style="font-size:12px; color:var(--texto2); margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Composição da Dieta</div>
+      <div class="nutri-item"><span>🌽 Silagem de Milho</span><strong>12 kg</strong></div>
+      <div class="nutri-item"><span>🌾 Concentrado 22%</span><strong>4,5 kg</strong></div>
+      <div class="nutri-item"><span>🌿 Feno de Alfafa</span><strong>2 kg</strong></div>
+    </div>
+
+    <div class="nutri-card" onclick="showToast('Editar dieta da Mimosa')">
+      <div class="nutri-header">
+        <span class="nutri-animal">🐄 Mimosa</span>
+        <span class="nutri-prod">22 L/dia</span>
+      </div>
+      <div style="font-size:12px; color:var(--texto2); margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Composição da Dieta</div>
+      <div class="nutri-item"><span>🌽 Silagem de Milho</span><strong>10 kg</strong></div>
+      <div class="nutri-item"><span>🌾 Concentrado 22%</span><strong>3,5 kg</strong></div>
+      <div class="nutri-item"><span>🌿 Feno de Alfafa</span><strong>1,5 kg</strong></div>
+    </div>
+
+    <div class="nutri-card" onclick="showToast('Editar dieta da Princesa')">
+      <div class="nutri-header">
+        <span class="nutri-animal">🐄 Princesa</span>
+        <span class="nutri-prod">32 L/dia</span>
+      </div>
+      <div style="font-size:12px; color:var(--texto2); margin-bottom:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.3px;">Composição da Dieta</div>
+      <div class="nutri-item"><span>🌽 Silagem de Milho</span><strong>14 kg</strong></div>
+      <div class="nutri-item"><span>🌾 Concentrado 22%</span><strong>5,5 kg</strong></div>
+      <div class="nutri-item"><span>🌿 Feno de Alfafa</span><strong>2,5 kg</strong></div>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-inicio" onclick="showTab('inicio')">
+    <span class="icon">🏠</span>Início
+  </button>
+  <button class="nav-item" id="nav-rebanho" onclick="showTab('rebanho')">
+    <span class="icon">🐄</span>Rebanho
+  </button>
+  <button class="nav-item" id="nav-producao" onclick="showTab('producao')">
+    <span class="icon">🥛</span>Produção
+  </button>
+  <button class="nav-item" id="nav-saude" onclick="showTab('saude')">
+    <span class="icon">💊</span>Saúde
+  </button>
+  <button class="nav-item" id="nav-alertas" onclick="showTab('alertas')">
+    <span class="icon">🔔</span>Alertas
+  </button>
+</nav>
+
+<!-- DETALHE ANIMAL -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-header">
+    <button class="btn-back" onclick="fecharDetalhe()">←</button>
+    <h2 id="detail-nome">Animal</h2>
+    <button class="btn-icon" style="background:rgba(255,255,255,0.15)" onclick="showToast('Editando animal...')">✏️</button>
+  </div>
+
+  <div class="detail-body" id="detail-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const animais = {
+  estrela: {
+    nome: 'Estrela', brinco: 'BR-001', status: 'Saudável', statusClass: 'saudavel',
+    raca: 'Holandesa', nascimento: '14/03/2020', peso: '520 kg', producao: '28 L/dia',
+    obs: 'Excelente produtora',
+    producoes: [
+      { data: '10/05/2026', manha: 24, tarde: 18 },
+      { data: '09/05/2026', manha: 14, tarde: 14 },
+    ],
+    saude: [
+      { tipo: 'Exame', tipoClass: 'exame', desc: 'Exame de brucelose — resultado negativo', data: '02/05' },
+    ],
+    alertas: [
+      { desc: 'Queda de 15% na produção nos últimos 3 dias', data: '11/05/2026 20:13', nivel: 'Média' }
+    ]
+  },
+  mimosa: {
+    nome: 'Mimosa', brinco: 'BR-002', status: 'Prenha', statusClass: 'prenha',
+    raca: 'Girolando', nascimento: '22/07/2019', peso: '410 kg', producao: '22 L/dia',
+    obs: 'Gestação 7 meses',
+    producoes: [
+      { data: '10/05/2026', manha: 24, tarde: 20 },
+    ],
+    saude: [
+      { tipo: 'Vacinação', tipoClass: 'vacina', desc: 'Vacinação contra aftosa', data: '04/05' },
+    ],
+    alertas: [
+      { desc: 'Detecção de cio — janela de inseminação', data: '11/05/2026 20:13', nivel: 'Média' }
+    ]
+  },
+  boneca: {
+    nome: 'Boneca', brinco: 'BR-003', status: 'Em Tratamento', statusClass: 'tratamento',
+    raca: 'Jersey', nascimento: '05/11/2021', peso: '480 kg', producao: '18 L/dia',
+    obs: 'Em tratamento de mastite',
+    producoes: [
+      { data: '08/05/2026', manha: 10, tarde: 8 },
+    ],
+    saude: [
+      { tipo: 'Tratamento', tipoClass: 'tratamento2', desc: 'Mastite clínica — teto posterior direito', data: '08/05' },
+    ],
+    alertas: [
+      { desc: 'Temperatura elevada detectada — possível infecção', data: '11/05/2026 20:13', nivel: 'Alta' }
+    ]
+  },
+  princesa: {
+    nome: 'Princesa', brinco: 'BR-004', status: 'Saudável', statusClass: 'saudavel',
+    raca: 'Holandesa', nascimento: '18/06/2020', peso: '540 kg', producao: '32 L/dia',
+    obs: 'Maior produtora do rebanho',
+    producoes: [
+      { data: '10/05/2026', manha: 17, tarde: 15 },
+      { data: '09/05/2026', manha: 16, tarde: 14 },
+    ],
+    saude: [
+      { tipo: 'Vacinação', tipoClass: 'vacina', desc: 'Vacinação contra carbúnculo', data: '28/04' },
+    ],
+    alertas: []
+  },
+  flor: {
+    nome: 'Flor', brinco: 'BR-005', status: 'Saudável', statusClass: 'saudavel',
+    raca: 'Gir Leiteiro', nascimento: '09/01/2022', peso: '390 kg', producao: '20 L/dia',
+    obs: 'Adaptação ao concentrado',
+    producoes: [
+      { data: '10/05/2026', manha: 10, tarde: 10 },
+    ],
+    saude: [],
+    alertas: [
+      { desc: 'Perda de peso de 8kg na última semana', data: '11/05/2026 20:13', nivel: 'Alta' }
+    ]
+  }
+};
+
+function showTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  const nav = document.getElementById('nav-' + tab);
+  if (nav) nav.classList.add('active');
+}
+
+function abrirAnimal(key) {
+  const a = animais[key];
+  if (!a) return;
+
+  document.getElementById('detail-nome').textContent = a.nome;
+
+  let prods = a.producoes.map(p => `
+    <div class="producao-row">
+      <div>
+        <div class="producao-data">${p.data}</div>
+        <div class="producao-turnos">Manhã: ${p.manha}L &nbsp; Tarde: ${p.tarde}L</div>
+      </div>
+      <div class="producao-total">🥛 ${p.manha + p.tarde}L</div>
+    </div>
+  `).join('');
+
+  let saude = a.saude.map(s => `
+    <div class="saude-row">
+      <div>
+        <div class="saude-top"><span class="saude-nome" style="font-size:13px">${a.nome}</span><span class="saude-tag ${s.tipoClass}">${s.tipo}</span></div>
+        <div class="saude-desc">${s.desc}</div>
+      </div>
+      <div class="saude-data">${s.data}</div>
+    </div>
+  `).join('') || '<div style="font-size:12px;color:var(--texto2);padding:4px 0">Nenhum registro</div>';
+
+  let alertas = a.alertas.map(al => `
+    <div class="alerta-row">
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:2px">${al.nivel} — ${al.desc}</div>
+        <div style="font-size:11px;color:var(--texto2)">${al.data}</div>
+      </div>
+      <span style="color:var(--amarelo);font-size:18px">⚠️</span>
+    </div>
+  `).join('') || '';
+
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-hero">
+      <div class="detail-avatar-row">
+        <div class="detail-avatar">${a.nome[0]}</div>
+        <div>
+          <div style="font-size:18px;font-weight:800;font-family:'Nunito',sans-serif">${a.nome}</div>
+          <span class="status-tag ${a.statusClass}">${a.status}</span>
+          <div style="font-size:12px;color:var(--texto2);margin-top:4px">Brinco: ${a.brinco}</div>
+        </div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item"><label>Raça</label><span>${a.raca}</span></div>
+        <div class="detail-item"><label>Nascimento</label><span>${a.nascimento}</span></div>
+        <div class="detail-item"><label>Peso</label><span>${a.peso}</span></div>
+        <div class="detail-item"><label>Produção Média</label><span>${a.producao}</span></div>
+      </div>
+      <div style="margin-top:12px;padding:10px;background:var(--cinza);border-radius:8px;font-size:13px;color:var(--texto2)">${a.obs}</div>
+    </div>
+
+    <div class="info-card">
+      <h3>🥛 Produção Recente</h3>
+      ${prods}
+    </div>
+
+    <div class="info-card">
+      <h3>💊 Registros de Saúde</h3>
+      ${saude}
+    </div>
+
+    ${alertas ? <div class="info-card"><h3>⚠️ Alertas</h3>${alertas}</div> : ''}
+  `;
+
+  document.getElementById('detail-panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function fecharDetalhe() {
+  document.getElementById('detail-panel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function filtrarAnimais(q) {
+  const cards = document.querySelectorAll('#lista-animais .animal-card');
+  const termo = q.toLowerCase();
+  cards.forEach(c => {
+    const nome = c.dataset.nome;
+    c.style.display = nome.includes(termo) ? 'flex' : 'none';
+  });
+}
+
+let filtroAtivo = 'todos';
+function filtroStatus(status, el) {
+  filtroAtivo = status;
+  document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  const cards = document.querySelectorAll('#lista-animais .animal-card');
+  cards.forEach(c => {
+    if (status === 'todos' || c.dataset.status === status) {
+      c.style.display = 'flex';
+    } else {
+      c.style.display = 'none';
+    }
+  });
+}
+
+let formAberto = false;
+function toggleFormProd() {
+  formAberto = !formAberto;
+  document.getElementById('form-producao').classList.toggle('open', formAberto);
+  if (formAberto) {
+    const hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('prod-data').value = hoje;
+  }
+}
+
+function salvarProducao() {
+  const animal = document.getElementById('prod-animal').value;
+  const data = document.getElementById('prod-data').value;
+  const manha = parseInt(document.getElementById('prod-manha').value) || 0;
+  const tarde = parseInt(document.getElementById('prod-tarde').value) || 0;
+
+  if (!animal) { showToast('⚠️ Selecione um animal!'); return; }
+  if (!manha && !tarde) { showToast('⚠️ Informe ao menos um turno!'); return; }
+
+  const total = manha + tarde;
+  const dataFmt = data ? new Date(data + 'T12:00:00').toLocaleDateString('pt-BR') : '--';
+
+  const item = document.createElement('div');
+  item.className = 'producao-list-item';
+  item.style.animation = 'fadeIn 0.3s ease';
+  item.innerHTML = `
+    <div class="prod-left">
+      <h4>${animal}</h4>
+      <div class="prod-data">${dataFmt}</div>
+      <div class="prod-turnos">Manhã: ${manha}L &nbsp; Tarde: ${tarde}L</div>
+    </div>
+    <div class="prod-total-badge">🥛 ${total}L</div>
+  `;
+
+  const lista = document.getElementById('lista-producao');
+  lista.insertBefore(item, lista.firstChild);
+
+  document.getElementById('prod-animal').value = '';
+  document.getElementById('prod-manha').value = '';
+  document.getElementById('prod-tarde').value = '';
+  toggleFormProd();
+  showToast(✅ Produção de ${animal} registrada!);
+}
+
+let alertasLidos = 0;
+function marcarAlerta(id) {
+  const el = document.getElementById(id);
+  if (!el.classList.contains('lido')) {
+    el.classList.add('lido');
+    alertasLidos++;
+    atualizarBadge();
+  }
+}
+
+function marcarTodos() {
+  document.querySelectorAll('.alerta-item:not(.lido)').forEach(el => el.classList.add('lido'));
+  alertasLidos = 4;
+  atualizarBadge();
+  showToast('✅ Todos os alertas marcados como lidos!');
+}
+
+function atualizarBadge() {
+  const restante = 4 - alertasLidos;
+  const badge = document.getElementById('alert-badge');
+  const cbadge = document.getElementById('alertas-count-badge');
+  badge.textContent = restante;
+  cbadge.textContent = restante;
+  badge.style.display = restante > 0 ? 'flex' : 'none';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// GRÁFICO HOME
+function buildChart() {
+  const dados = [38, 45, 52, 56, 70, 80, 80];
+  const dias = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+  const max = Math.max(...dados);
+  const wrap = document.getElementById('home-chart');
+  const labels = document.getElementById('home-chart-labels');
+
+  dados.forEach((val, i) => {
+    const h = Math.round((val / max) * 90);
+    const isLast = i === dados.length - 1;
+
+    const grp = document.createElement('div');
+    grp.className = 'chart-bar-group';
+
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar' + (isLast ? ' highlight' : '');
+    bar.style.height = h + 'px';
+
+    const tip = document.createElement('div');
+    tip.className = 'chart-tooltip';
+    tip.textContent = val + 'L';
+    bar.appendChild(tip);
+
+    grp.appendChild(bar);
+    wrap.appendChild(grp);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'chart-label';
+    lbl.textContent = dias[i];
+    lbl.style.flex = '1';
+    lbl.style.textAlign = 'center';
+    labels.appendChild(lbl);
+  });
+}
+
+buildChart();
+
+// Set today's date in form
+const hoje = new Date().toISOString().split('T')[0];
+if (document.getElementById('prod-data')) document.getElementById('prod-data').value = hoje;
+</script>
+</body>
+</html>
