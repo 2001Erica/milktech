@@ -9,6 +9,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get('/',(req,res)=>{
+  res.sendFile(_dirname + '/index02.html');
+});
+
 const db = new sqlite3.Database('./milktech.db');
 
 /* CRIAR TABELA */

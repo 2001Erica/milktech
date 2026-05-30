@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MilkTech – Tecnologia que transforma leite em resultado</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #2DBF7E;
+    --green-dark: #1a9460;
+    --blue: #1B3F6B;
+    --blue-light: #2557A7;
+    --cream: #F7F5F0;
+    --white: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5%;
+    background: rgba(247,245,240,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.4rem; color: var(--blue);
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .nav-logo span { color: var(--green); }
+  .nav-cta {
+    background: var(--green); color: white;
+    padding: 0.6rem 1.4rem; border-radius: 50px;
+    font-weight: 500; font-size: 0.9rem;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .nav-cta:hover { background: var(--green-dark); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 7rem 5% 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 70% 60% at 80% 50%, #d4f0e3 0%, transparent 70%),
+                radial-gradient(ellipse 50% 40% at 10% 80%, #dce8f7 0%, transparent 60%);
+  }
+  .hero-content {
+    position: relative; z-index: 1;
+    max-width: 600px;
+    animation: fadeUp 0.9s ease both;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: white; border: 1px solid #d1fae5;
+    padding: 0.35rem 1rem; border-radius: 50px;
+    font-size: 0.8rem; color: var(--green-dark); font-weight: 500;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge::before { content: '🐄'; }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 800; line-height: 1.1;
+    color: var(--blue); margin-bottom: 1.2rem;
+  }
+  h1 em { color: var(--green); font-style: normal; }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--text-muted);
+    line-height: 1.7; margin-bottom: 2rem; font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--blue); color: white;
+    padding: 0.85rem 2rem; border-radius: 50px;
+    font-weight: 500; font-size: 1rem;
+    text-decoration: none; transition: all 0.2s;
+    box-shadow: 0 4px 20px rgba(27,63,107,0.25);
+  }
+  .btn-primary:hover { background: var(--blue-light); transform: translateY(-2px); }
+  .btn-secondary {
+    background: transparent; color: var(--blue);
+    padding: 0.85rem 2rem; border-radius: 50px;
+    font-weight: 500; font-size: 1rem;
+    text-decoration: none; border: 2px solid var(--blue);
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--blue); color: white; }
+
+  .hero-phone {
+    position: absolute; right: 8%; top: 50%;
+    transform: translateY(-50%);
+    width: min(320px, 35vw);
+    animation: floatPhone 4s ease-in-out infinite;
+    filter: drop-shadow(0 30px 40px rgba(0,0,0,0.18));
+    z-index: 1;
+  }
+  @keyframes floatPhone {
+    0%, 100% { transform: translateY(-50%) rotate(-2deg); }
+    50% { transform: translateY(-54%) rotate(2deg); }
+  }
+
+  /* STATS */
+  .stats {
+    background: var(--blue);
+    padding: 3rem 5%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.4rem; font-weight: 800;
+    color: var(--green);
+  }
+  .stat-label { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 0.3rem; }
+
+  /* FEATURES */
+  .features {
+    padding: 6rem 5%;
+    max-width: 1200px; margin: 0 auto;
+  }
+  .section-tag {
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--green);
+    margin-bottom: 0.8rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 700; color: var(--blue);
+    margin-bottom: 3.5rem; max-width: 500px;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .feature-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .feature-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--green);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+  .feature-card:hover::before { transform: scaleX(1); }
+  .feature-icon {
+    font-size: 2rem; margin-bottom: 1rem;
+    width: 56px; height: 56px;
+    background: #f0fdf4; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .feature-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1.1rem;
+    color: var(--blue); margin-bottom: 0.6rem;
+  }
+  .feature-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+
+  /* HOW IT WORKS */
+  .how {
+    background: var(--blue);
+    padding: 6rem 5%;
+    color: white;
+  }
+  .how-inner { max-width: 1100px; margin: 0 auto; }
+  .how .section-title { color: white; }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem; margin-top: 1rem;
+  }
+  .step { position: relative; padding-left: 0; }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem; font-weight: 800;
+    color: rgba(255,255,255,0.08); line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1.1rem;
+    color: var(--green); margin-bottom: 0.5rem;
+  }
+  .step-desc { color: rgba(255,255,255,0.65); font-size: 0.9rem; line-height: 1.6; }
+
+  /* CTA */
+  .cta-section {
+    padding: 6rem 5%;
+    text-align: center;
+    background: linear-gradient(135deg, #e8f8f1 0%, #dce8f7 100%);
+  }
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 800; color: var(--blue);
+    margin-bottom: 1rem;
+  }
+  .cta-section p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 2rem; }
+  .cta-link {
+    display: inline-block;
+    background: var(--green); color: white;
+    padding: 1rem 2.5rem; border-radius: 50px;
+    font-weight: 600; font-size: 1.05rem;
+    text-decoration: none;
+    box-shadow: 0 6px 24px rgba(45,191,126,0.35);
+    transition: all 0.2s;
+  }
+  .cta-link:hover { background: var(--green-dark); transform: translateY(-3px); }
+
+  /* FOOTER */
+  footer {
+    background: #111827; color: rgba(255,255,255,0.5);
+    text-align: center; padding: 2rem 5%;
+    font-size: 0.85rem;
+  }
+  footer strong { color: white; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    .hero-phone { display: none; }
+    .hero { padding-top: 6rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">MILK<span>TECH</span></div>
+  <a href="#api" class="nav-cta">Ver API</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Tecnologia para pecuária leiteira</div>
+    <h1>Tecnologia que transforma <em>leite</em> em resultado.</h1>
+    <p class="hero-sub">Gerencie seu rebanho com inteligência. Monitore produção, saúde, nutrição e finanças da sua fazenda em tempo real.</p>
+    <div class="hero-btns">
+      <a href="#features" class="btn-primary">Conheça as funcionalidades</a>
+      <a href="#api" class="btn-secondary">Acessar API</a>
+    </div>
+  </div>
+  <img class="hero-phone" src="https://i.imgur.com/placeholder.png" alt="App MilkTech"
+    onerror="this.style.display='none'">
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div>
+    <div class="stat-num">360°</div>
+    <div class="stat-label">Visão da fazenda</div>
+  </div>
+  <div>
+    <div class="stat-num">5</div>
+    <div class="stat-label">Módulos integrados</div>
+  </div>
+  <div>
+    <div class="stat-num">24h</div>
+    <div class="stat-label">Monitoramento contínuo</div>
+  </div>
+  <div>
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Alertas automáticos</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="section-tag">Funcionalidades</div>
+  <h2 class="section-title">Tudo que sua fazenda precisa em um só lugar</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🏠</div>
+      <div class="feature-title">Painel Diário</div>
+      <p class="feature-desc">Visão 360° da fazenda ao abrir o app. Produção do dia, alertas críticos e atalhos rápidos para as tarefas mais comuns.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🐄</div>
+      <div class="feature-title">Rebanho</div>
+      <p class="feature-desc">Lista completa dos animais com filtros para vacas doentes ou em período seco. Raça, peso, nascimento e produção média diária.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🥛</div>
+      <div class="feature-title">Produção de Leite</div>
+      <p class="feature-desc">Registros diários por animal. Acompanhe manhã e tarde individualmente e monitore a produção total da fazenda.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">Nutrição</div>
+      <p class="feature-desc">Correlacione a dieta individual de cada animal com o ganho de produtividade. Silagem, concentrado e muito mais.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">❤️</div>
+      <div class="feature-title">Saúde Animal</div>
+      <p class="feature-desc">Monitore tratamentos e vacinas. Receba lembretes automáticos de carência de leite, próximas vacinas e exames.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <div class="feature-title">Finanças</div>
+      <p class="feature-desc">Monitore custo de produção e faturamento em tempo real. Saiba o lucro real por litro produzido na sua fazenda.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <div class="feature-title">Alertas Inteligentes</div>
+      <p class="feature-desc">O app identifica automaticamente via brinco eletrônico: temperatura elevada, cio, queda de produção e perda de peso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-inner">
+    <div class="section-tag">Como funciona</div>
+    <h2 class="section-title">Simples de usar, poderoso nos resultados</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Cadastre seus animais</div>
+        <p class="step-desc">Adicione cada animal com nome, brinco, raça, peso e data de nascimento.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Registre a produção</div>
+        <p class="step-desc">Registre diariamente a produção de manhã e tarde de cada vaca.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Monitore a saúde</div>
+        <p class="step-desc">Acompanhe tratamentos, vacinas e receba alertas automáticos de anomalias.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Analise os resultados</div>
+        <p class="step-desc">Veja gráficos de produção, custos e tome decisões com base em dados reais.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="api">
+  <h2>Pronto para transformar sua fazenda?</h2>
+  <p>Acesse a API do MilkTech e integre com seu sistema agora mesmo.</p>
+  <a href="https://milktech-2.onrender.com/animais" class="cta-link" target="_blank">🚀 Acessar API</a>
+</section>
+
+<footer>
+  <p>© 2026 <strong>MilkTech</strong> — Tecnologia que transforma leite em resultado.</p>
+</footer>
+
+</body>
+</html>
