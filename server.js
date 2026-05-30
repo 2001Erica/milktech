@@ -1,3 +1,5 @@
+
+
 const express = require('express');
 const cors = require('cors');
 const sqlite3 = require('sqlite3').verbose();
@@ -126,8 +128,8 @@ res.send('Animal removido');
 
 /* SERVIDOR */
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
 
-console.log('🐄 MilkTech rodando');
-
+app.listen(PORT, () => {
+  console.log(`🐄 MilkTech rodando na porta ${PORT}`);
 });
